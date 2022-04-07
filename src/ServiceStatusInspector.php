@@ -21,27 +21,6 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
      */
     private array $exceptionHandlers = [];
 
-    /**
-     * @param array<string, callable> $componentInspectors
-     * @param callable[]              $exceptionHandlers
-     */
-    public function __construct(
-        array $componentInspectors,
-        array $exceptionHandlers = [],
-    ) {
-        foreach ($componentInspectors as $name => $componentInspector) {
-            if (is_callable($componentInspector)) {
-                $this->setComponentInspector($name, $componentInspector);
-            }
-        }
-
-        foreach ($exceptionHandlers as $exceptionHandler) {
-            if (is_callable($exceptionHandler)) {
-                $this->addExceptionHandler($exceptionHandler);
-            }
-        }
-    }
-
     public function isAvailable(): bool
     {
         $availabilities = $this->get();
