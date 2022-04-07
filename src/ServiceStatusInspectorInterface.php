@@ -18,7 +18,13 @@ interface ServiceStatusInspectorInterface
      */
     public function get(): array;
 
-    public function setComponentInspector(string $name, callable $inspector): void;
+    /**
+     * @param iterable<string, callable> $inspectors
+     */
+    public function setComponentInspectors(iterable $inspectors): ServiceStatusInspectorInterface;
 
-    public function addExceptionHandler(callable $handler): void;
+    /**
+     * @param iterable<string, callable> $handlers
+     */
+    public function setExceptionHandlers(iterable $handlers): ServiceStatusInspectorInterface;
 }
