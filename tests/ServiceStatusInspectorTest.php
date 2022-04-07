@@ -24,35 +24,47 @@ class ServiceStatusInspectorTest extends TestCase
     {
         return [
             'no components' => [
-                'inspector' => new ServiceStatusInspector([]),
+                'inspector' => new ServiceStatusInspector(),
                 'expected' => true,
             ],
             'single component, component is available' => [
-                'inspector' => new ServiceStatusInspector([
-                    'service1' => $this->createPassingComponentInspector(),
-                ]),
+                'inspector' => (function () {
+                    $inspector = new ServiceStatusInspector();
+                    $inspector->setComponentInspector('service1', $this->createPassingInspector());
+
+                    return $inspector;
+                })(),
                 'expected' => true,
             ],
             'single component, component is unavailable by means of throwing an exception' => [
-                'inspector' => new ServiceStatusInspector([
-                    'service1' => $this->createFailingComponentInspector(new \Exception()),
-                ]),
+                'inspector' => (function () {
+                    $inspector = new ServiceStatusInspector();
+                    $inspector->setComponentInspector('service1', $this->createFailingInspector(new \Exception()));
+
+                    return $inspector;
+                })(),
                 'expected' => false,
             ],
             'multiple component, components are all available' => [
-                'inspector' => new ServiceStatusInspector([
-                    'service1' => $this->createPassingComponentInspector(),
-                    'service2' => $this->createPassingComponentInspector(),
-                    'service3' => $this->createPassingComponentInspector(),
-                ]),
+                'inspector' => (function () {
+                    $inspector = new ServiceStatusInspector();
+                    $inspector->setComponentInspector('service1', $this->createPassingInspector());
+                    $inspector->setComponentInspector('service2', $this->createPassingInspector());
+                    $inspector->setComponentInspector('service3', $this->createPassingInspector());
+
+                    return $inspector;
+                })(),
                 'expected' => true,
             ],
             'multiple component, one component is unavailable by means of throwing an exception' => [
-                'inspector' => new ServiceStatusInspector([
-                    'service1' => $this->createPassingComponentInspector(),
-                    'service2' => $this->createFailingComponentInspector(new \Exception()),
-                    'service3' => $this->createPassingComponentInspector(),
-                ]),
+                'inspector' => (function () {
+                    $inspector = new ServiceStatusInspector();
+                    $inspector->setComponentInspector('service1', $this->createPassingInspector());
+                    $inspector->setComponentInspector('service2', $this->createFailingInspector(new \Exception()));
+                    $inspector->setComponentInspector('service3', $this->createPassingInspector());
+
+                    return $inspector;
+                })(),
                 'expected' => false,
             ],
         ];
@@ -75,31 +87,40 @@ class ServiceStatusInspectorTest extends TestCase
     {
         return [
             'no components' => [
-                'inspector' => new ServiceStatusInspector([]),
+                'inspector' => new ServiceStatusInspector(),
                 'expected' => [],
             ],
             'single component, component is available' => [
-                'inspector' => new ServiceStatusInspector([
-                    'service1' => $this->createPassingComponentInspector(),
-                ]),
+                'inspector' => (function () {
+                    $inspector = new ServiceStatusInspector();
+                    $inspector->setComponentInspector('service1', $this->createPassingInspector());
+
+                    return $inspector;
+                })(),
                 'expected' => [
                     'service1' => true,
                 ],
             ],
             'single component, component is unavailable by means of throwing an exception' => [
-                'inspector' => new ServiceStatusInspector([
-                    'service1' => $this->createFailingComponentInspector(new \Exception()),
-                ]),
+                'inspector' => (function () {
+                    $inspector = new ServiceStatusInspector();
+                    $inspector->setComponentInspector('service1', $this->createFailingInspector(new \Exception()));
+
+                    return $inspector;
+                })(),
                 'expected' => [
                     'service1' => false,
                 ],
             ],
             'multiple component, components are all available' => [
-                'inspector' => new ServiceStatusInspector([
-                    'service1' => $this->createPassingComponentInspector(),
-                    'service2' => $this->createPassingComponentInspector(),
-                    'service3' => $this->createPassingComponentInspector(),
-                ]),
+                'inspector' => (function () {
+                    $inspector = new ServiceStatusInspector();
+                    $inspector->setComponentInspector('service1', $this->createPassingInspector());
+                    $inspector->setComponentInspector('service2', $this->createPassingInspector());
+                    $inspector->setComponentInspector('service3', $this->createPassingInspector());
+
+                    return $inspector;
+                })(),
                 'expected' => [
                     'service1' => true,
                     'service2' => true,
@@ -107,11 +128,14 @@ class ServiceStatusInspectorTest extends TestCase
                 ],
             ],
             'multiple component, one component is unavailable by means of throwing an exception' => [
-                'inspector' => new ServiceStatusInspector([
-                    'service1' => $this->createPassingComponentInspector(),
-                    'service2' => $this->createFailingComponentInspector(new \Exception()),
-                    'service3' => $this->createPassingComponentInspector(),
-                ]),
+                'inspector' => (function () {
+                    $inspector = new ServiceStatusInspector();
+                    $inspector->setComponentInspector('service1', $this->createPassingInspector());
+                    $inspector->setComponentInspector('service2', $this->createFailingInspector(new \Exception()));
+                    $inspector->setComponentInspector('service3', $this->createPassingInspector());
+
+                    return $inspector;
+                })(),
                 'expected' => [
                     'service1' => true,
                     'service2' => false,
@@ -121,13 +145,13 @@ class ServiceStatusInspectorTest extends TestCase
         ];
     }
 
-    private function createPassingComponentInspector(): callable
+    private function createPassingInspector(): callable
     {
         return function () {
         };
     }
 
-    private function createFailingComponentInspector(\Throwable $exception): callable
+    private function createFailingInspector(\Throwable $exception): callable
     {
         return function () use ($exception) {
             throw $exception;
