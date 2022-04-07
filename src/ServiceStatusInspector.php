@@ -37,7 +37,7 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
 
         foreach ($exceptionHandlers as $exceptionHandler) {
             if (is_callable($exceptionHandler)) {
-                $this->exceptionHandlers[] = $exceptionHandler;
+                $this->addExceptionHandler($exceptionHandler);
             }
         }
     }
@@ -70,6 +70,11 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
     public function setComponentInspector(string $name, callable $inspector): void
     {
         $this->componentInspectors[$name] = $inspector;
+    }
+
+    public function addExceptionHandler(callable $handler): void
+    {
+        $this->exceptionHandlers[] = $handler;
     }
 
     /**
