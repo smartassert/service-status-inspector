@@ -17,4 +17,6 @@ interface ServiceStatusInspectorInterface
      * @return array<string, bool>
      */
     public function get(): array;
+
+    public function setComponentInspector(string $name, callable $inspector): void;
 }

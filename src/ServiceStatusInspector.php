@@ -22,8 +22,8 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
     private array $exceptionHandlers = [];
 
     /**
-     * @param callable[] $componentInspectors
-     * @param callable[] $exceptionHandlers
+     * @param array<string, callable> $componentInspectors
+     * @param callable[]              $exceptionHandlers
      */
     public function __construct(
         array $componentInspectors,
@@ -31,7 +31,7 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
     ) {
         foreach ($componentInspectors as $name => $componentInspector) {
             if (is_callable($componentInspector)) {
-                $this->componentInspectors[$name] = $componentInspector;
+                $this->setComponentInspector($name, $componentInspector);
             }
         }
 
@@ -65,6 +65,11 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
         }
 
         return $this->componentAvailabilities;
+    }
+
+    public function setComponentInspector(string $name, callable $inspector): void
+    {
+        $this->componentInspectors[$name] = $inspector;
     }
 
     /**
