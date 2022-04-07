@@ -19,4 +19,6 @@ interface ServiceStatusInspectorInterface
     public function get(): array;
 
     public function setComponentInspector(string $name, callable $inspector): void;
+
+    public function addExceptionHandler(callable $handler): void;
 }
