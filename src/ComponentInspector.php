@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SmartAssert\Tests\ServiceStatusInspector\ComponentInspector;
+namespace SmartAssert\ServiceStatusInspector;
 
-use SmartAssert\ServiceStatusInspector\ComponentInspectorInterface;
-
-class Inspector implements ComponentInspectorInterface
+class ComponentInspector implements ComponentInspectorInterface
 {
     public function __construct(
         private readonly string $identifier,
