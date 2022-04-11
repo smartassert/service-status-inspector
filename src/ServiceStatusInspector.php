@@ -17,7 +17,7 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
     private array $componentAvailabilities = [];
 
     /**
-     * @var array<string, callable>
+     * @var ExceptionHandlerInterface[]
      */
     private array $exceptionHandlers = [];
 
@@ -59,9 +59,9 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
 
     public function setExceptionHandlers(iterable $handlers): ServiceStatusInspectorInterface
     {
-        foreach ($handlers as $name => $handler) {
-            if (is_callable($handler)) {
-                $this->exceptionHandlers[(string) $name] = $handler;
+        foreach ($handlers as $handler) {
+            if ($handler instanceof ExceptionHandlerInterface) {
+                $this->exceptionHandlers[] = $handler;
             }
         }
 
@@ -82,7 +82,7 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
                 $isAvailable = false;
 
                 foreach ($this->exceptionHandlers as $exceptionHandler) {
-                    ($exceptionHandler)($exception);
+                    $exceptionHandler->handle($exception);
                 }
             }
 
