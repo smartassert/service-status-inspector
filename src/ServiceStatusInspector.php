@@ -7,7 +7,7 @@ namespace SmartAssert\ServiceStatusInspector;
 class ServiceStatusInspector implements ServiceStatusInspectorInterface
 {
     /**
-     * @var array<string, callable>
+     * @var ComponentInspectorInterface[]
      */
     private array $componentInspectors = [];
 
@@ -48,9 +48,9 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
 
     public function setComponentInspectors(iterable $inspectors): ServiceStatusInspectorInterface
     {
-        foreach ($inspectors as $name => $inspector) {
-            if (is_callable($inspector)) {
-                $this->componentInspectors[(string) $name] = $inspector;
+        foreach ($inspectors as $inspector) {
+            if ($inspector instanceof ComponentInspectorInterface) {
+                $this->componentInspectors[$inspector->getIdentifier()] = $inspector;
             }
         }
 
@@ -76,10 +76,8 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
         $availabilities = [];
 
         foreach ($this->componentInspectors as $name => $componentInspector) {
-            $isAvailable = true;
-
             try {
-                ($componentInspector)();
+                $isAvailable = $componentInspector->isAvailable();
             } catch (\Throwable $exception) {
                 $isAvailable = false;
 
