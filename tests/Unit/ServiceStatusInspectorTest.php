@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SmartAssert\Tests\ServiceStatusInspector\Unit;
 
 use PHPUnit\Framework\TestCase;
-use SmartAssert\ServiceStatusInspector\ComponentStatus;
+use SmartAssert\ServiceStatusInspector\ComponentStatusInspector;
 use SmartAssert\ServiceStatusInspector\ServiceStatusInspector;
 use SmartAssert\Tests\ServiceStatusInspector\ComponentInspector\ExceptionThrowingInspector;
 
@@ -29,67 +29,89 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => new ServiceStatusInspector(),
                 'expected' => true,
             ],
-            'single component, component is available' => [
+            'single component, component status is boolean true' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
-                            new ComponentStatus('service1', true),
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', true),
                         ])
                     ;
                 })(),
                 'expected' => true,
             ],
-            'single component, component is unavailable' => [
+            'single component, component status is boolean false' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
-                            new ComponentStatus('service1', false),
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', false),
                         ])
                         ;
                 })(),
                 'expected' => false,
             ],
+            'single component, component status is string' => [
+                'inspector' => (function () {
+                    return (new ServiceStatusInspector())
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', '0.123'),
+                        ])
+                        ;
+                })(),
+                'expected' => true,
+            ],
             'single component, component is unavailable by means of throwing an exception' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
+                        ->setComponentStatusInspectors([
                             new ExceptionThrowingInspector('service1', new \Exception()),
                         ])
                     ;
                 })(),
                 'expected' => false,
             ],
-            'multiple component, components are all available' => [
+            'multiple components, all have string statuses' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
-                            new ComponentStatus('service1', true),
-                            new ComponentStatus('service2', true),
-                            new ComponentStatus('service3', true),
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', '0.123'),
+                            new ComponentStatusInspector('service2', '34v634'),
+                            new ComponentStatusInspector('service3', 'foo'),
                         ])
                     ;
                 })(),
                 'expected' => true,
             ],
-            'multiple component, one component is unavailable' => [
+            'multiple components, all have boolean true statuses' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
-                            new ComponentStatus('service1', true),
-                            new ComponentStatus('service2', false),
-                            new ComponentStatus('service3', true),
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', true),
+                            new ComponentStatusInspector('service2', true),
+                            new ComponentStatusInspector('service3', true),
+                        ])
+                    ;
+                })(),
+                'expected' => true,
+            ],
+            'multiple components, one has string status, one boolean true and one boolean false' => [
+                'inspector' => (function () {
+                    return (new ServiceStatusInspector())
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', 'string'),
+                            new ComponentStatusInspector('service2', false),
+                            new ComponentStatusInspector('service3', true),
                         ])
                         ;
                 })(),
                 'expected' => false,
             ],
-            'multiple component, one component is unavailable by means of throwing an exception' => [
+            'multiple components, one component is unavailable by means of throwing an exception' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
-                            new ComponentStatus('service1', true),
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', true),
                             new ExceptionThrowingInspector('service2', new \Exception()),
-                            new ComponentStatus('service3', true),
+                            new ComponentStatusInspector('service3', true),
                         ])
                         ;
                 })(),
@@ -101,7 +123,7 @@ class ServiceStatusInspectorTest extends TestCase
     /**
      * @dataProvider getDataProvider
      *
-     * @param array<string, bool> $expected
+     * @param array<string, bool|string> $expected
      */
     public function testGet(ServiceStatusInspector $inspector, array $expected): void
     {
@@ -118,11 +140,11 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => new ServiceStatusInspector(),
                 'expected' => [],
             ],
-            'single component, component is available' => [
+            'single component, component status is boolean true' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
-                            new ComponentStatus('service1', true),
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', true),
                         ])
                         ;
                 })(),
@@ -130,11 +152,11 @@ class ServiceStatusInspectorTest extends TestCase
                     'service1' => true,
                 ],
             ],
-            'single component, component is unavailable' => [
+            'single component, component status is boolean false' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
-                            new ComponentStatus('service1', false),
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', false),
                         ])
                         ;
                 })(),
@@ -142,10 +164,22 @@ class ServiceStatusInspectorTest extends TestCase
                     'service1' => false,
                 ],
             ],
+            'single component, component status is string' => [
+                'inspector' => (function () {
+                    return (new ServiceStatusInspector())
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', '0.123'),
+                        ])
+                        ;
+                })(),
+                'expected' => [
+                    'service1' => '0.123',
+                ],
+            ],
             'single component, component is unavailable by means of throwing an exception' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
+                        ->setComponentStatusInspectors([
                             new ExceptionThrowingInspector('service1', new \Exception()),
                         ])
                         ;
@@ -154,13 +188,29 @@ class ServiceStatusInspectorTest extends TestCase
                     'service1' => false,
                 ],
             ],
-            'multiple component, components are all available' => [
+            'multiple components, all have string statuses' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
-                            new ComponentStatus('service1', true),
-                            new ComponentStatus('service2', true),
-                            new ComponentStatus('service3', true),
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', '0.123'),
+                            new ComponentStatusInspector('service2', '34v634'),
+                            new ComponentStatusInspector('service3', 'foo'),
+                        ])
+                        ;
+                })(),
+                'expected' => [
+                    'service1' => '0.123',
+                    'service2' => '34v634',
+                    'service3' => 'foo',
+                ],
+            ],
+            'multiple components, all have boolean true statuses' => [
+                'inspector' => (function () {
+                    return (new ServiceStatusInspector())
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', true),
+                            new ComponentStatusInspector('service2', true),
+                            new ComponentStatusInspector('service3', true),
                         ])
                         ;
                 })(),
@@ -170,29 +220,29 @@ class ServiceStatusInspectorTest extends TestCase
                     'service3' => true,
                 ],
             ],
-            'multiple component, one component is unavailable' => [
+            'multiple components, one has string status, one boolean true and one boolean false' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
-                            new ComponentStatus('service1', true),
-                            new ComponentStatus('service2', false),
-                            new ComponentStatus('service3', true),
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', 'string'),
+                            new ComponentStatusInspector('service2', false),
+                            new ComponentStatusInspector('service3', true),
                         ])
                         ;
                 })(),
                 'expected' => [
-                    'service1' => true,
+                    'service1' => 'string',
                     'service2' => false,
                     'service3' => true,
                 ],
             ],
-            'multiple component, one component is unavailable by means of throwing an exception' => [
+            'multiple components, one component is unavailable by means of throwing an exception' => [
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
-                        ->setComponentInspectors([
-                            new ComponentStatus('service1', true),
+                        ->setComponentStatusInspectors([
+                            new ComponentStatusInspector('service1', true),
                             new ExceptionThrowingInspector('service2', new \Exception()),
-                            new ComponentStatus('service3', true),
+                            new ComponentStatusInspector('service3', true),
                         ])
                         ;
                 })(),
