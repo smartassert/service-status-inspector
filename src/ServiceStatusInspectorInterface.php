@@ -19,7 +19,7 @@ interface ServiceStatusInspectorInterface
     public function get(): array;
 
     /**
-     * @param iterable<ComponentInspectorInterface> $inspectors
+     * @param iterable<ComponentStatusInterface> $inspectors
      */
     public function setComponentInspectors(iterable $inspectors): ServiceStatusInspectorInterface;
 

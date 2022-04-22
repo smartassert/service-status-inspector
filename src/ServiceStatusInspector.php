@@ -7,7 +7,7 @@ namespace SmartAssert\ServiceStatusInspector;
 class ServiceStatusInspector implements ServiceStatusInspectorInterface
 {
     /**
-     * @var ComponentInspectorInterface[]
+     * @var ComponentStatusInterface[]
      */
     private array $componentInspectors = [];
 
@@ -49,7 +49,7 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
     public function setComponentInspectors(iterable $inspectors): ServiceStatusInspectorInterface
     {
         foreach ($inspectors as $inspector) {
-            if ($inspector instanceof ComponentInspectorInterface) {
+            if ($inspector instanceof ComponentStatusInterface) {
                 $this->componentInspectors[$inspector->getIdentifier()] = $inspector;
             }
         }
