@@ -9,19 +9,19 @@ interface ServiceStatusInspectorInterface
     public function isAvailable(): bool;
 
     /**
-     * Get an array of <service name>:bool
+     * Get an array of <service name>:bool|string
      * e.g.
      * ['service1' => true, 'service2' => false]
      * .
      *
-     * @return array<string, bool>
+     * @return array<string, bool|string>
      */
     public function get(): array;
 
     /**
-     * @param iterable<ComponentStatusInterface> $inspectors
+     * @param iterable<ComponentStatusInspectorInterface> $inspectors
      */
-    public function setComponentInspectors(iterable $inspectors): ServiceStatusInspectorInterface;
+    public function setComponentStatusInspectors(iterable $inspectors): ServiceStatusInspectorInterface;
 
     /**
      * @param iterable<string, callable> $handlers
