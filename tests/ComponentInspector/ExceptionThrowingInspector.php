@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SmartAssert\Tests\ServiceStatusInspector\ComponentInspector;
 
-use SmartAssert\ServiceStatusInspector\ComponentInspector;
+use SmartAssert\ServiceStatusInspector\ComponentStatusInspector;
 
-class ExceptionThrowingInspector extends ComponentInspector
+class ExceptionThrowingInspector extends ComponentStatusInspector
 {
     public function __construct(
         private readonly string $identifier,

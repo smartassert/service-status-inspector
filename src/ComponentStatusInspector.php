@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace SmartAssert\ServiceStatusInspector;
 
-class ComponentInspector implements ComponentInspectorInterface
+class ComponentStatusInspector implements ComponentStatusInspectorInterface
 {
     public function __construct(
         private readonly string $identifier,
-        private readonly bool $isAvailable,
+        private readonly bool|string $status,
     ) {
     }
 
-    public function isAvailable(): bool
+    public function getStatus(): bool|string
     {
-        return $this->isAvailable;
+        return $this->status;
     }
 
     public function getIdentifier(): string

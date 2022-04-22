@@ -7,14 +7,14 @@ namespace SmartAssert\ServiceStatusInspector;
 class ServiceStatusInspector implements ServiceStatusInspectorInterface
 {
     /**
-     * @var ComponentInspectorInterface[]
+     * @var ComponentStatusInspectorInterface[]
      */
-    private array $componentInspectors = [];
+    private array $componentStatusInspectors = [];
 
     /**
-     * @var array<string, bool>
+     * @var array<string, bool|string>
      */
-    private array $componentAvailabilities = [];
+    private array $componentStatuses = [];
 
     /**
      * @var ExceptionHandlerInterface[]
@@ -23,10 +23,10 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
 
     public function isAvailable(): bool
     {
-        $availabilities = $this->get();
+        $statuses = $this->get();
 
-        foreach ($availabilities as $availability) {
-            if (false === $availability) {
+        foreach ($statuses as $status) {
+            if (is_bool($status) && false === $status) {
                 return false;
             }
         }
@@ -35,22 +35,22 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
     }
 
     /**
-     * @return array<string, bool>
+     * @return array<string, bool|string>
      */
     public function get(): array
     {
-        if ([] === $this->componentAvailabilities) {
-            $this->componentAvailabilities = $this->findAvailabilities();
+        if ([] === $this->componentStatuses) {
+            $this->componentStatuses = $this->findStatuses();
         }
 
-        return $this->componentAvailabilities;
+        return $this->componentStatuses;
     }
 
-    public function setComponentInspectors(iterable $inspectors): ServiceStatusInspectorInterface
+    public function setComponentStatusInspectors(iterable $inspectors): ServiceStatusInspectorInterface
     {
         foreach ($inspectors as $inspector) {
-            if ($inspector instanceof ComponentInspectorInterface) {
-                $this->componentInspectors[$inspector->getIdentifier()] = $inspector;
+            if ($inspector instanceof ComponentStatusInspectorInterface) {
+                $this->componentStatusInspectors[$inspector->getIdentifier()] = $inspector;
             }
         }
 
@@ -69,26 +69,26 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
     }
 
     /**
-     * @return array<string, bool>
+     * @return array<string, bool|string>
      */
-    private function findAvailabilities(): array
+    private function findStatuses(): array
     {
-        $availabilities = [];
+        $statuses = [];
 
-        foreach ($this->componentInspectors as $name => $componentInspector) {
+        foreach ($this->componentStatusInspectors as $name => $componentInspector) {
             try {
-                $isAvailable = $componentInspector->isAvailable();
+                $status = $componentInspector->getStatus();
             } catch (\Throwable $exception) {
-                $isAvailable = false;
+                $status = false;
 
                 foreach ($this->exceptionHandlers as $exceptionHandler) {
                     $exceptionHandler->handle($exception);
                 }
             }
 
-            $availabilities[$name] = $isAvailable;
+            $statuses[$name] = $status;
         }
 
-        return $availabilities;
+        return $statuses;
     }
 }
