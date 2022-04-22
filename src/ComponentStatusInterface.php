@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SmartAssert\ServiceStatusInspector;
 
-interface ComponentInspectorInterface
+interface ComponentStatusInterface
 {
     /**
      * @throws \Throwable

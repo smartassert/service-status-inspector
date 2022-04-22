@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SmartAssert\Tests\ServiceStatusInspector\Unit;
 
 use PHPUnit\Framework\TestCase;
-use SmartAssert\ServiceStatusInspector\ComponentInspector;
+use SmartAssert\ServiceStatusInspector\ComponentStatus;
 use SmartAssert\ServiceStatusInspector\ServiceStatusInspector;
 use SmartAssert\Tests\ServiceStatusInspector\ComponentInspector\ExceptionThrowingInspector;
 
@@ -33,7 +33,7 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
                         ->setComponentInspectors([
-                            new ComponentInspector('service1', true),
+                            new ComponentStatus('service1', true),
                         ])
                     ;
                 })(),
@@ -43,7 +43,7 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
                         ->setComponentInspectors([
-                            new ComponentInspector('service1', false),
+                            new ComponentStatus('service1', false),
                         ])
                         ;
                 })(),
@@ -63,9 +63,9 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
                         ->setComponentInspectors([
-                            new ComponentInspector('service1', true),
-                            new ComponentInspector('service2', true),
-                            new ComponentInspector('service3', true),
+                            new ComponentStatus('service1', true),
+                            new ComponentStatus('service2', true),
+                            new ComponentStatus('service3', true),
                         ])
                     ;
                 })(),
@@ -75,9 +75,9 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
                         ->setComponentInspectors([
-                            new ComponentInspector('service1', true),
-                            new ComponentInspector('service2', false),
-                            new ComponentInspector('service3', true),
+                            new ComponentStatus('service1', true),
+                            new ComponentStatus('service2', false),
+                            new ComponentStatus('service3', true),
                         ])
                         ;
                 })(),
@@ -87,9 +87,9 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
                         ->setComponentInspectors([
-                            new ComponentInspector('service1', true),
+                            new ComponentStatus('service1', true),
                             new ExceptionThrowingInspector('service2', new \Exception()),
-                            new ComponentInspector('service3', true),
+                            new ComponentStatus('service3', true),
                         ])
                         ;
                 })(),
@@ -122,7 +122,7 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
                         ->setComponentInspectors([
-                            new ComponentInspector('service1', true),
+                            new ComponentStatus('service1', true),
                         ])
                         ;
                 })(),
@@ -134,7 +134,7 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
                         ->setComponentInspectors([
-                            new ComponentInspector('service1', false),
+                            new ComponentStatus('service1', false),
                         ])
                         ;
                 })(),
@@ -158,9 +158,9 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
                         ->setComponentInspectors([
-                            new ComponentInspector('service1', true),
-                            new ComponentInspector('service2', true),
-                            new ComponentInspector('service3', true),
+                            new ComponentStatus('service1', true),
+                            new ComponentStatus('service2', true),
+                            new ComponentStatus('service3', true),
                         ])
                         ;
                 })(),
@@ -174,9 +174,9 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
                         ->setComponentInspectors([
-                            new ComponentInspector('service1', true),
-                            new ComponentInspector('service2', false),
-                            new ComponentInspector('service3', true),
+                            new ComponentStatus('service1', true),
+                            new ComponentStatus('service2', false),
+                            new ComponentStatus('service3', true),
                         ])
                         ;
                 })(),
@@ -190,9 +190,9 @@ class ServiceStatusInspectorTest extends TestCase
                 'inspector' => (function () {
                     return (new ServiceStatusInspector())
                         ->setComponentInspectors([
-                            new ComponentInspector('service1', true),
+                            new ComponentStatus('service1', true),
                             new ExceptionThrowingInspector('service2', new \Exception()),
-                            new ComponentInspector('service3', true),
+                            new ComponentStatus('service3', true),
                         ])
                         ;
                 })(),
