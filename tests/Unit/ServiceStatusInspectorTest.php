@@ -45,7 +45,7 @@ class ServiceStatusInspectorTest extends TestCase
                         ->setComponentStatusInspectors([
                             new ComponentStatusInspector('service1', false),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => false,
             ],
@@ -55,7 +55,7 @@ class ServiceStatusInspectorTest extends TestCase
                         ->setComponentStatusInspectors([
                             new ComponentStatusInspector('service1', '0.123'),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => true,
             ],
@@ -101,7 +101,7 @@ class ServiceStatusInspectorTest extends TestCase
                             new ComponentStatusInspector('service2', false),
                             new ComponentStatusInspector('service3', true),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => false,
             ],
@@ -113,7 +113,7 @@ class ServiceStatusInspectorTest extends TestCase
                             new ExceptionThrowingInspector('service2', new \Exception()),
                             new ComponentStatusInspector('service3', true),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => false,
             ],
@@ -146,7 +146,7 @@ class ServiceStatusInspectorTest extends TestCase
                         ->setComponentStatusInspectors([
                             new ComponentStatusInspector('service1', true),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => [
                     'service1' => true,
@@ -158,7 +158,7 @@ class ServiceStatusInspectorTest extends TestCase
                         ->setComponentStatusInspectors([
                             new ComponentStatusInspector('service1', false),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => [
                     'service1' => false,
@@ -170,7 +170,7 @@ class ServiceStatusInspectorTest extends TestCase
                         ->setComponentStatusInspectors([
                             new ComponentStatusInspector('service1', '0.123'),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => [
                     'service1' => '0.123',
@@ -182,7 +182,7 @@ class ServiceStatusInspectorTest extends TestCase
                         ->setComponentStatusInspectors([
                             new ExceptionThrowingInspector('service1', new \Exception()),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => [
                     'service1' => false,
@@ -196,7 +196,7 @@ class ServiceStatusInspectorTest extends TestCase
                             new ComponentStatusInspector('service2', '34v634'),
                             new ComponentStatusInspector('service3', 'foo'),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => [
                     'service1' => '0.123',
@@ -212,7 +212,7 @@ class ServiceStatusInspectorTest extends TestCase
                             new ComponentStatusInspector('service2', true),
                             new ComponentStatusInspector('service3', true),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => [
                     'service1' => true,
@@ -228,7 +228,7 @@ class ServiceStatusInspectorTest extends TestCase
                             new ComponentStatusInspector('service2', false),
                             new ComponentStatusInspector('service3', true),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => [
                     'service1' => 'string',
@@ -244,7 +244,7 @@ class ServiceStatusInspectorTest extends TestCase
                             new ExceptionThrowingInspector('service2', new \Exception()),
                             new ComponentStatusInspector('service3', true),
                         ])
-                        ;
+                    ;
                 })(),
                 'expected' => [
                     'service1' => true,
