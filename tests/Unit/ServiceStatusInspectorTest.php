@@ -22,7 +22,7 @@ class ServiceStatusInspectorTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function isAvailableDataProvider(): array
+    public static function isAvailableDataProvider(): array
     {
         return [
             'no components' => [
@@ -133,7 +133,7 @@ class ServiceStatusInspectorTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             'no components' => [
