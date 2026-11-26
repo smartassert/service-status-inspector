@@ -9,8 +9,7 @@ class ComponentStatusInspector implements ComponentStatusInspectorInterface
     public function __construct(
         private readonly string $identifier,
         private readonly bool|string $status,
-    ) {
-    }
+    ) {}
 
     public function getStatus(): bool|string
     {
