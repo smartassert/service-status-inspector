@@ -46,12 +46,13 @@ class ServiceStatusInspector implements ServiceStatusInspectorInterface
         return $this->componentStatuses;
     }
 
+    /**
+     * @param iterable<ComponentStatusInspectorInterface> $inspectors
+     */
     public function setComponentStatusInspectors(iterable $inspectors): ServiceStatusInspectorInterface
     {
         foreach ($inspectors as $inspector) {
-            if ($inspector instanceof ComponentStatusInspectorInterface) {
-                $this->componentStatusInspectors[$inspector->getIdentifier()] = $inspector;
-            }
+            $this->componentStatusInspectors[$inspector->getIdentifier()] = $inspector;
         }
 
         return $this;
