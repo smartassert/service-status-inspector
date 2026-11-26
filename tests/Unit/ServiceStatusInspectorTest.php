@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartAssert\Tests\ServiceStatusInspector\Unit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SmartAssert\ServiceStatusInspector\ComponentStatusInspector;
 use SmartAssert\ServiceStatusInspector\ServiceStatusInspector;
@@ -11,9 +12,7 @@ use SmartAssert\Tests\ServiceStatusInspector\ComponentInspector\ExceptionThrowin
 
 class ServiceStatusInspectorTest extends TestCase
 {
-    /**
-     * @dataProvider isAvailableDataProvider
-     */
+    #[DataProvider('isAvailableDataProvider')]
     public function testIsAvailable(ServiceStatusInspector $inspector, bool $expected): void
     {
         self::assertSame($expected, $inspector->isAvailable());
@@ -121,10 +120,9 @@ class ServiceStatusInspectorTest extends TestCase
     }
 
     /**
-     * @dataProvider getDataProvider
-     *
      * @param array<string, bool|string> $expected
      */
+    #[DataProvider('getDataProvider')]
     public function testGet(ServiceStatusInspector $inspector, array $expected): void
     {
         self::assertSame($expected, $inspector->get());
